@@ -115,7 +115,6 @@ test.describe( 'Sidebar', () => {
 			'Summary',
 			'Categories',
 			'Tags',
-			'Discussion',
 		] );
 		// Also check 'panels' that are not rendered as TabPanels.
 		const postExcerptPanel = page.getByRole( 'button', {
@@ -124,8 +123,12 @@ test.describe( 'Sidebar', () => {
 		const postFeaturedImagePanel = page.getByRole( 'button', {
 			name: 'Set featured image',
 		} );
+		const postDiscussionPanel = page.getByRole( 'button', {
+			name: 'Change discussion options',
+		} );
 		await expect( postExcerptPanel ).toHaveCount( 1 );
 		await expect( postFeaturedImagePanel ).toHaveCount( 1 );
+		await expect( postDiscussionPanel ).toHaveCount( 1 );
 
 		await page.evaluate( () => {
 			const { removeEditorPanel } =
@@ -142,5 +145,6 @@ test.describe( 'Sidebar', () => {
 		await expect( documentSettingsPanels ).toHaveCount( 1 );
 		await expect( postExcerptPanel ).toHaveCount( 0 );
 		await expect( postFeaturedImagePanel ).toHaveCount( 0 );
+		await expect( postDiscussionPanel ).toHaveCount( 0 );
 	} );
 } );
