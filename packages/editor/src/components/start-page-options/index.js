@@ -12,7 +12,7 @@ import { store as editorStore } from '../../store';
 function StartPageOptionsModal() {
 	const { setIsInserterOpened } = useDispatch( editorStore );
 	useEffect( () => {
-		setIsInserterOpened( { tab: 'patterns', category: 'all' } );
+		setIsInserterOpened( { tab: 'patterns', category: 'core/content' } );
 	}, [ setIsInserterOpened ] );
 	return null;
 }
