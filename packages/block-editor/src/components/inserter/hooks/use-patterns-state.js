@@ -75,13 +75,7 @@ const usePatternsState = ( onInsert, rootClientId ) => {
 	);
 
 	const allCategories = useMemo( () => {
-		const categories = [
-			{
-				name: 'core/content',
-				label: __( 'Starter content' ),
-			},
-			...patternCategories,
-		];
+		const categories = [ ...patternCategories ];
 		userPatternCategories?.forEach( ( userCategory ) => {
 			if (
 				! categories.find(
