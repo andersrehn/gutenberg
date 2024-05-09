@@ -76,6 +76,7 @@ const VALID_SETTINGS = [
 	'typography.fontWeight',
 	'typography.letterSpacing',
 	'typography.lineHeight',
+	'typography.textAlign',
 	'typography.textColumns',
 	'typography.textDecoration',
 	'typography.textTransform',
