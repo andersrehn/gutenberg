@@ -242,15 +242,13 @@ export default () => {
 				if ( defaultEntry ) {
 					const { namespace, value } = defaultEntry;
 					// Check that the value is a JSON object. Send a console warning if not.
-					if (
-						typeof SCRIPT_DEBUG !== 'undefined' &&
-						SCRIPT_DEBUG === true &&
-						! isPlainObject( value )
-					) {
-						// eslint-disable-next-line no-console
-						console.warn(
-							`The value of data-wp-context in "${ namespace }" store must be a valid stringified JSON object.`
-						);
+					if ( globalThis.SCRIPT_DEBUG ) {
+						if ( ! isPlainObject( value ) ) {
+							// eslint-disable-next-line no-console
+							console.warn(
+								`The value of data-wp-context in "${ namespace }" store must be a valid stringified JSON object.`
+							);
+						}
 					}
 					updateSignals( currentValue.current, {
 						[ namespace ]: deepClone( value ),

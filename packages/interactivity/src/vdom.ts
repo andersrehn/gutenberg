@@ -120,12 +120,7 @@ export function toVdom( root ) {
 				( obj, [ name, ns, value ] ) => {
 					const directiveMatch = directiveParser.exec( name );
 					if ( directiveMatch === null ) {
-						if (
-							// @ts-expect-error This is a debug-only warning.
-							typeof SCRIPT_DEBUG !== 'undefined' &&
-							// @ts-expect-error This is a debug-only warning.
-							SCRIPT_DEBUG === true
-						) {
+						if ( globalThis.SCRIPT_DEBUG ) {
 							// eslint-disable-next-line no-console
 							console.warn( `Invalid directive: ${ name }.` );
 						}
