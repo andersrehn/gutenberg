@@ -1,13 +1,6 @@
 /**
- * External dependencies
- */
-import { paramCase as kebabCase } from 'change-case';
-import { downloadZip } from 'client-zip';
-
-/**
  * WordPress dependencies
  */
-import { downloadBlob } from '@wordpress/blob';
 import { external, trash, backup } from '@wordpress/icons';
 import { addQueryArgs } from '@wordpress/url';
 import { useDispatch, useSelect } from '@wordpress/data';
@@ -39,6 +32,7 @@ import {
 import { store as editorStore } from '../../store';
 import { unlock } from '../../lock-unlock';
 import isTemplateRevertable from '../../store/utils/is-template-revertable';
+import { exportPatternAsJSONAction } from './export-pattern-as-json-action';
 
 // Patterns.
 export const {
@@ -734,35 +728,35 @@ const resetTemplateAction = {
 				if ( items[ 0 ].type === TEMPLATE_PART_POST_TYPE ) {
 					await removeTemplates( items );
 				} else {
-				for ( const template of items ) {
+					for ( const template of items ) {
 						if ( template.type === TEMPLATE_POST_TYPE ) {
-					await revertTemplate( template, {
-						allowUndo: false,
-					} );
-					await saveEditedEntityRecord(
-						'postType',
-						template.type,
-						template.id
-					);
-				}
+							await revertTemplate( template, {
+								allowUndo: false,
+							} );
+							await saveEditedEntityRecord(
+								'postType',
+								template.type,
+								template.id
+							);
+						}
 					}
-				createSuccessNotice(
-					items.length > 1
-						? sprintf(
-								/* translators: The number of items. */
-								__( '%s items reset.' ),
-								items.length
-						  )
-						: sprintf(
-								/* translators: The template/part's name. */
-								__( '"%s" reset.' ),
+					createSuccessNotice(
+						items.length > 1
+							? sprintf(
+									/* translators: The number of items. */
+									__( '%s items reset.' ),
+									items.length
+							  )
+							: sprintf(
+									/* translators: The template/part's name. */
+									__( '"%s" reset.' ),
 									decodeEntities( getItemTitle( items[ 0 ] ) )
-						  ),
-					{
-						type: 'snackbar',
-						id: 'revert-template-action',
-					}
-				);
+							  ),
+						{
+							type: 'snackbar',
+							id: 'revert-template-action',
+						}
+					);
 				}
 			} catch ( error ) {
 				let fallbackErrorMessage;
@@ -1020,55 +1014,6 @@ const renameTemplateAction = {
 					</HStack>
 				</VStack>
 			</form>
-		);
-	},
-};
-
-function getJsonFromItem( item ) {
-	return JSON.stringify(
-		{
-			__file: item.type,
-			title: item.title || item.name,
-			content: item.patternPost.content.raw,
-			syncStatus: item.patternPost.wp_pattern_sync_status,
-		},
-		null,
-		2
-	);
-}
-
-export const exportPatternAsJSONAction = {
-	id: 'export-pattern',
-	label: __( 'Export as JSON' ),
-	supportsBulk: true,
-	isEligible: ( item ) => item.type === PATTERN_TYPES.user,
-	callback: async ( items ) => {
-		if ( items.length === 1 ) {
-			return downloadBlob(
-				`${ kebabCase( items[ 0 ].title || items[ 0 ].name ) }.json`,
-				getJsonFromItem( items[ 0 ] ),
-				'application/json'
-			);
-		}
-		const nameCount = {};
-		const filesToZip = items.map( ( item ) => {
-			const name = kebabCase( item.title || item.name );
-			nameCount[ name ] = ( nameCount[ name ] || 0 ) + 1;
-			return {
-				name: `${
-					name +
-					( nameCount[ name ] > 1
-						? '-' + ( nameCount[ name ] - 1 )
-						: '' )
-				}.json`,
-				lastModified: new Date(),
-				input: getJsonFromItem( item ),
-			};
-		} );
-		return downloadBlob(
-			__( 'patterns-export' ) + '.zip',
-			await downloadZip( filesToZip ).blob(),
-			'application/zip'
 		);
 	},
 };
