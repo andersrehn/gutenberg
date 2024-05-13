@@ -28,7 +28,6 @@ import PluginDocumentSettingPanel from '../plugin-document-setting-panel';
 import PluginSidebar from '../plugin-sidebar';
 import PostActions from '../post-actions';
 import PostCardPanel from '../post-card-panel';
-import PostDiscussionPanel from '../post-discussion/panel';
 import PostLastRevisionPanel from '../post-last-revision/panel';
 import PostSummary from './post-summary';
 import PostTaxonomiesPanel from '../post-taxonomies/panel';
